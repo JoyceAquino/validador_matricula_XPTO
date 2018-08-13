@@ -6,8 +6,9 @@ import java.io.IOException;
 public interface MatriculaService {
 	
 	/**
-	 * Recebe o arquivo com a lista de matriculas sem digito verificador calculado
-	 * e gera um novo arquivo com os digitos validos calculados.
+	 * Recebe o arquivo com a lista de matriculas sem digito verificador calculado,
+	 * Lê cada matricula do arquivo e calcula o digito verificador válido.
+	 * Gera um novo arquivo com cada matricula e seus digitos válidos calculados.
 	 * @param arquivo
 	 * @throws FileNotFoundException 
 	 */

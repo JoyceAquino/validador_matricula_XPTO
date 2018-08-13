@@ -14,7 +14,7 @@ public class MatriculaServiceImpl implements MatriculaService {
 
 	private String matricula;
 	private Integer base_hexadecimal = 16;
-
+	
 	public void calculaDigitoVerificador(String arquivo) throws IOException  {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(arquivo));  
 		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") +"/matriculas_com_dv.txt"));
@@ -30,7 +30,8 @@ public class MatriculaServiceImpl implements MatriculaService {
 		};
 		bufferedReader.close();
 	}
-
+	
+	
 	public void validaDigitoVerificador(String arquivo)throws IOException {
 		String digitoValido; 
 		String digitoVerificado;
@@ -49,22 +50,34 @@ public class MatriculaServiceImpl implements MatriculaService {
 		}
 		bufferedReader.close();
 	}
-
+	
+	/*
+	 * Escreve uma no linha no arquivo de saída 
+	 */
 	private void escreveEmArquivo(BufferedWriter arquivo,String linha) throws IOException{
 		arquivo.write(linha);
 		arquivo.newLine();
 		arquivo.flush();
 	}
-
+	
+	/*
+	 * Pega o digito verificador da matrícula pela ultima posição da string.
+	 */
 	private String pegaDigitoVerificador(String matricula){
 		return matricula.substring(matricula.length()-1);
 	}
-
+	
+	/*
+	 * Calcula o digito verificador lendo cada caracter da string de matrícula
+	 * Converte os mesmos para decimal e soma todos eles.
+	 * Usa o resto da divisão (totalDosDigitos % base_hexadecimal), convertendo o resultado novamente para Hexadecimal
+	 * O Retorno da função é o DigitoVerificador. 
+	 */
 	private String retornaDigitoVerificador(String matricula){
-		Integer decimal = 0;
+		Integer totalDosDigitos = 0;
 		for (int i = 0; i < matricula.length(); i++) {	
-			decimal += Integer.parseInt(Character.toString(matricula.charAt(i)), base_hexadecimal);
+			totalDosDigitos += Integer.parseInt(Character.toString(matricula.charAt(i)), base_hexadecimal);
 		};
-		return Integer.toHexString(decimal % base_hexadecimal).toString();
+		return Integer.toHexString(totalDosDigitos % base_hexadecimal).toString();
 	}	
 }
