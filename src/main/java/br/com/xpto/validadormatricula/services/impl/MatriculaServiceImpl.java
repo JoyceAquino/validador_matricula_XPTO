@@ -15,36 +15,35 @@ public class MatriculaServiceImpl implements MatriculaService {
 	private String matricula;
 	private Integer base_hexadecimal = 16;
 
-	@Override
 	public void calculaDigitoVerificador(String arquivo) throws IOException  {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(arquivo));  
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") +"/matriculas_com_dv.txt"));
 		try {
 			while( (matricula = bufferedReader.readLine()) != null ){
 				try {
-					System.out.println("DIGITO VERIFICADOR : "+ retornaDigitoVerificador(matricula));
+					escreveEmArquivo(bufferedWriter, matricula + "-" + retornaDigitoVerificador(matricula));
 				} catch (Exception e) {
-					System.out.println("DIGITO NÃO CALCULADO PARA A MATRICULA : " + matricula.toUpperCase() + " EXEÇÃO " + e.getMessage());
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		};
+		bufferedReader.close();
 	}
 
 	public void validaDigitoVerificador(String arquivo)throws IOException {
-		String isDigito; 
+		String digitoValido; 
 		String digitoVerificado;
 		String digitoAVerificar;		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(arquivo));
-		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:/Users/joyce/Desktop/teste_b2w/matriculas_validadas.txt"));
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") +"/matriculas_validadas.txt"));
 		while((matricula = bufferedReader.readLine()) != null){
 			digitoAVerificar = pegaDigitoVerificador(matricula);
-			digitoVerificado = retornaDigitoVerificador(matricula);;
-			if(digitoAVerificar.equals(digitoVerificado)) {isDigito = " true ";}else {isDigito = " false ";}
+			digitoVerificado = retornaDigitoVerificador(matricula.substring(1, 9));;
+			if(digitoAVerificar.equals(digitoVerificado)) {digitoValido = " true ";}else {digitoValido = " false ";}
 			try {
-				escreveEmArquivo(bufferedWriter, matricula  + isDigito );
+				escreveEmArquivo(bufferedWriter, matricula  + digitoValido );
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -65,7 +64,6 @@ public class MatriculaServiceImpl implements MatriculaService {
 		Integer decimal = 0;
 		for (int i = 0; i < matricula.length(); i++) {	
 			decimal += Integer.parseInt(Character.toString(matricula.charAt(i)), base_hexadecimal);
-
 		};
 		return Integer.toHexString(decimal % base_hexadecimal).toString();
 	}	
