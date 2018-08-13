@@ -11,7 +11,9 @@ o arquivo de saída verifica se os digitos das matriculas do arquivo de entrada 
 
 Para usar esse projeto
 1 - Clone o respositorio para sua estação de trabalho  >  git clone https://github.com/JoyceAquino/validador_matricula_XPTO.git
+
 2 - Importe para o seu IDE Java (Eclipse, Netbeans, SpringBoot ...).
+
 3 - Runs as JavaAplication
 
 Os arquivos de entrada e saída estão e são gerados no repositório do próprio projeto para evitar problemas de acesso aos diretórios.
