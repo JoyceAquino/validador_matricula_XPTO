@@ -5,26 +5,33 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import br.com.xpto.validadormatricula.services.MatriculaService;
 
 @Service
 public class MatriculaServiceImpl implements MatriculaService {
-
+	
+	private static final Logger log = LoggerFactory.getLogger(MatriculaServiceImpl.class);
+	
 	private String matricula;
 	private Integer base_hexadecimal = 16;
-	
+
 	public void calculaDigitoVerificador(String arquivo) throws IOException  {
+		log.info("Calculando o digito verificador !");
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(arquivo));  
 		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getProperty("user.dir") +"/matriculas_com_dv.txt"));
 		try {
 			while( (matricula = bufferedReader.readLine()) != null ){
 				try {
+					log.info("Escrevendo no arquivo: " +  matricula + "-" + retornaDigitoVerificador(matricula));
 					escreveEmArquivo(bufferedWriter, matricula + "-" + retornaDigitoVerificador(matricula));
 				} catch (Exception e) {
 				}
 			}
+			log.info("Operação finalizada ! O Arquivo de saída está salvo no diretório " + System.getProperty("user.dir") +". Nome do Arquivo : matriculas_com_dv.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		};
@@ -33,6 +40,7 @@ public class MatriculaServiceImpl implements MatriculaService {
 	
 	
 	public void validaDigitoVerificador(String arquivo)throws IOException {
+		log.info("Validando o digito verificador !");
 		String digitoValido; 
 		String digitoVerificado;
 		String digitoAVerificar;		
@@ -43,11 +51,13 @@ public class MatriculaServiceImpl implements MatriculaService {
 			digitoVerificado = retornaDigitoVerificador(matricula.substring(1, 9));;
 			if(digitoAVerificar.equals(digitoVerificado)) {digitoValido = " true ";}else {digitoValido = " false ";}
 			try {
-				escreveEmArquivo(bufferedWriter, matricula  + digitoValido );
+				log.info(matricula.toUpperCase() + digitoValido + "Digito calculado : " + digitoVerificado.toUpperCase());
+				escreveEmArquivo(bufferedWriter, matricula  + digitoValido);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		log.info("Operação finalizada ! O Arquivo de saída está salvo no diretório " + System.getProperty("user.dir") +". Nome do Arquivo : matriculas_validadas.txt");
 		bufferedReader.close();
 	}
 	
